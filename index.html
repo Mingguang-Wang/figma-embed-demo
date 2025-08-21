@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Figma埋め込みデモ</title>
+<style>
+:root { --fg:#111; --bg:#fff; --acc:#3b82f6; }
+@media (prefers-color-scheme: dark){ :root{ --fg:#e5e7eb; --bg:#0b0f19; --acc:#60a5fa; } }
+*{ box-sizing:border-box; }
+body{ margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:var(--fg); background:radial-gradient(1200px 500px at 20% -10%, #c7d2fe33, transparent), var(--bg); }
+header{ padding:48px 24px 24px; text-align:center; }
+h1{ margin:0; font-size: clamp(28px, 4vw, 44px); }
+p.lead{ margin:8px 0 0; opacity:.8; }
+main{ max-width:960px; margin:24px auto 64px; padding:0 16px; }
+.card{ background:rgba(255,255,255,.75); backdrop-filter:saturate(1.2) blur(6px); border:1px solid #e5e7eb22; border-radius:20px; padding:20px; box-shadow:0 8px 24px #00000014; }
+@media (prefers-color-scheme: dark){ .card{ background:#111827cc; border-color:#37415166; } }
+.grid{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+.btn{ display:inline-block; padding:10px 16px; border-radius:12px; border:1px solid #0000001a; text-decoration:none; color:var(--fg); transition:transform .08s ease, box-shadow .2s ease; background:#fff1; }
+.btn:hover{ transform:translateY(-2px); box-shadow:0 8px 18px #0000001f; }
+footer{ padding:40px 16px; text-align:center; opacity:.7; }
+</style>
+</head>
+<body>
+<header>
+<h1>Figma埋め込みデモ</h1>
+<p class="lead">このページを公開して、Figmaの <strong>Embed</strong> で貼り付けできます。</p>
+</header>
+<main>
+<section class="card" style="margin-bottom:16px">
+<h2>使い方（概要）</h2>
+<ol>
+<li>この <code>index.html</code> をホスティング（GitHub Pages / Netlify / Vercel など）。</li>
+<li>公開URLをコピー。</li>
+<li>Figmaで <em>Insert → Embed</em> を選び、URLを貼り付けて配置。</li>
+</ol>
+</section>
+<section class="grid">
+<div class="card">
+<h3>レスポンシブ</h3>
+<p>Figma上のフレームサイズに合わせて縮尺されるので、レイアウトは%やflex/gridで組むと綺麗に表示されます。</p>
+</div>
+<div class="card">
+<h3>ダークモード</h3>
+<p><code>prefers-color-scheme</code> で自動的に暗いUIにも馴染みます。</p>
+</div>
+<div class="card">
+<h3>インタラクション</h3>
+<p>通常のJSも動作します（外部通信やCookie制限には注意）。</p>
+<button class="btn" id="cta">カウント: <span id="count">0</span></button>
+</div>
+</section>
+</main>
+<footer>
+© Demo
+</footer>
+<script>
+let c=0; const btn=document.getElementById('cta'); const out=document.getElementById('count');
+btn.addEventListener('click',()=>{ c++; out.textContent=c; });
+</script>
+</body>
+</html>
