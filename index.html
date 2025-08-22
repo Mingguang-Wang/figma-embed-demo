@@ -3,60 +3,96 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Figma埋め込みデモ</title>
+<title>加盟店データ登録</title>
 <style>
-:root { --fg:#111; --bg:#fff; --acc:#3b82f6; }
-@media (prefers-color-scheme: dark){ :root{ --fg:#e5e7eb; --bg:#0b0f19; --acc:#60a5fa; } }
-*{ box-sizing:border-box; }
-body{ margin:0; font:16px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial; color:var(--fg); background:radial-gradient(1200px 500px at 20% -10%, #c7d2fe33, transparent), var(--bg); }
-header{ padding:48px 24px 24px; text-align:center; }
-h1{ margin:0; font-size: clamp(28px, 4vw, 44px); }
-p.lead{ margin:8px 0 0; opacity:.8; }
-main{ max-width:960px; margin:24px auto 64px; padding:0 16px; }
-.card{ background:rgba(255,255,255,.75); backdrop-filter:saturate(1.2) blur(6px); border:1px solid #e5e7eb22; border-radius:20px; padding:20px; box-shadow:0 8px 24px #00000014; }
-@media (prefers-color-scheme: dark){ .card{ background:#111827cc; border-color:#37415166; } }
-.grid{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
-.btn{ display:inline-block; padding:10px 16px; border-radius:12px; border:1px solid #0000001a; text-decoration:none; color:var(--fg); transition:transform .08s ease, box-shadow .2s ease; background:#fff1; }
-.btn:hover{ transform:translateY(-2px); box-shadow:0 8px 18px #0000001f; }
-footer{ padding:40px 16px; text-align:center; opacity:.7; }
+:root{
+--bg:#f6f8fb;
+--panel:#ffffff;
+--muted:#6b7280;
+--border:#d1d5db;
+--ink:#0f172a;
+--accent:#1677ff; /* 鮮やかな青（スクショ風） */
+--accent-ink:#fff;
+--danger:#d92d20;
+--shadow:0 10px 24px rgba(15,23,42,.06);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+margin:0; background:var(--bg); color:var(--ink);
+font:16px/1.6 system-ui,-apple-system,"Segoe UI",Roboto,"Hiragino Kaku Gothic ProN","Hiragino Sans",Meiryo,Helvetica,Arial,sans-serif;
+}
+
+
+/* 外枠エリア（Figmaのフレーム風） */
+.frame{
+max-width:1200px; margin:28px auto; padding:24px; border:1px solid #cbd5e1; border-radius:8px; background:var(--panel); box-shadow:var(--shadow);
+}
+.page-header{
+margin:0 0 20px; padding:22px; text-align:center; border:1px solid #111; border-radius:6px; background:#f1f2f4;
+}
+.page-header h1{ margin:0; font-size:28px; letter-spacing:.04em; }
+.page-sub{ margin:6px 0 0; color:var(--muted); font-size:14px; }
+
+
+/* 入力パネル */
+.card{ background:#f9fafb; border:1px solid var(--border); border-radius:8px; padding:22px; }
+
+
+.field{ margin-bottom:22px; }
+.label{ display:block; font-weight:700; margin:0 0 8px; }
+.required::after{ content:"*"; color:var(--danger); margin-left:4px; font-weight:700; }
+
+
+.control{ position:relative; }
+.control input,
+.control select{
+appearance:none; width:100%; padding:12px 14px; border:1px solid var(--border); border-radius:6px; background:#fff; color:var(--ink);
+transition:border-color .15s ease, box-shadow .15s ease;
+}
+.control select{ background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>'); background-repeat:no-repeat; background-position:right 10px center; padding-right:40px; }
+.control input:focus, .control select:focus{ outline:0; border-color:var(--accent); box-shadow:0 0 0 3px rgba(22,119,255,.18); }
+
+
+.helper{ font-size:12px; color:var(--muted); margin-top:6px; }
+.error{ font-size:12px; color:var(--danger); margin-top:6px; min-height:1.1em; }
+
+
+/* % サフィックス */
+.with-suffix{ position:relative; }
+.with-suffix input{ padding-right:40px; }
+.suffix{ position:absolute; right:12px; top:50%; transform:translateY(-50%); color:var(--muted); pointer-events:none; }
+
+
+/* ボタン */
+.actions{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:26px; }
+button{ display:inline-block; width:100%; padding:12px 18px; border-radius:8px; border:1px solid transparent; cursor:pointer; font-weight:700; letter-spacing:.02em; }
+.btn-outline{ background:#e9f1ff; color:var(--accent); border-color:#c9defe; }
+.btn-outline:hover{ filter:brightness(1.03); }
+.btn-primary{ background:var(--accent); color:var(--accent-ink); }
+.btn-primary:hover{ filter:brightness(1.03); }
+.btn-primary:disabled{ opacity:.6; cursor:not-allowed; }
+
+
+/* レイアウト補助 */
+@media (min-width: 840px){
+.grid{ display:grid; grid-template-columns:1fr 1fr; gap:18px 24px; }
+.grid .field.full{ grid-column:1 / -1; }
+}
 </style>
 </head>
 <body>
-<header>
-<h1>Figma埋め込みデモ</h1>
-<p class="lead">このページを公開して、Figmaの <strong>Embed</strong> で貼り付けできます。</p>
-</header>
-<main>
-<section class="card" style="margin-bottom:16px">
-<h2>使い方（概要）</h2>
-<ol>
-<li>この <code>index.html</code> をホスティング（GitHub Pages / Netlify / Vercel など）。</li>
-<li>公開URLをコピー。</li>
-<li>Figmaで <em>Insert → Embed</em> を選び、URLを貼り付けて配置。</li>
-</ol>
-</section>
-<section class="grid">
-<div class="card">
-<h3>レスポンシブ</h3>
-<p>Figma上のフレームサイズに合わせて縮尺されるので、レイアウトは%やflex/gridで組むと綺麗に表示されます。</p>
+<div class="frame">
+<div class="page-header">
+<h1>加盟店データ登録</h1>
+<p class="page-sub">〜取引先名、新規定義日、原価率〜</p>
 </div>
+
+
 <div class="card">
-<h3>ダークモード</h3>
-<p><code>prefers-color-scheme</code> で自動的に暗いUIにも馴染みます。</p>
-</div>
-<div class="card">
-<h3>インタラクション</h3>
-<p>通常のJSも動作します（外部通信やCookie制限には注意）。</p>
-<button class="btn" id="cta">カウント: <span id="count">0</span></button>
-</div>
-</section>
-</main>
-<footer>
-© Demo
-</footer>
-<script>
-let c=0; const btn=document.getElementById('cta'); const out=document.getElementById('count');
-btn.addEventListener('click',()=>{ c++; out.textContent=c; });
-</script>
-</body>
+<form id="merchantForm" novalidate>
+<div class="grid">
+<!-- 取引先（DSBDチェーン名） -->
+<div class="field full">
+<label for="chain" class="label required">DSBDチェーン名</label>
 </html>
